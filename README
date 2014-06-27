@@ -13,5 +13,5 @@ To Build:
 
 Supported platforms:
 - Ubuntu, Mac OS X
-- Can be build for iOS, but fonts and GUI are wrong in GUI
+- Can be build for iOS, but fonts and GUI are wrong
 - Can be build for win32 if you manually build aaplus and change '/' with '\\' in .pro file (not tested)
