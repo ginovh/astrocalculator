@@ -1,4 +1,5 @@
-//
+Astrocalculator is a simple program to calculate astronomical ephemerides.
+
 Dependencies :
 Qt 4.8.0 and above 
 AA+ v1.47 and above (http://www.naughter.com/aa.html)
