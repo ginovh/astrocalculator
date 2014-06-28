@@ -4,6 +4,7 @@
 
 TEMPLATE = app
 DEPENDPATH += .
+CONFIG += debug
 
 INCLUDEPATH += . aaplus/
 QMAKE_RPATHDIR += aaplus/lib

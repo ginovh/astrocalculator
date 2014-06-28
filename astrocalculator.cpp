@@ -151,7 +151,7 @@ void AstroCalculator::riseSetPlanet(QDate date)  {
     PlanetRiseTime->setText("");
     PlanetSetTime->setText("");
     PlanetTransitTime->setText("");
-    for (int i=0; i<9; i++)  {
+    for (int i=1; i<6; i++)  {
         planet = static_cast<CAAElliptical::EllipticalObject> (i);
 
         switch ( planet ) {
@@ -231,7 +231,7 @@ void AstroCalculator::updateHorizontalCoordPlanet()
     PlanetElongation->setText("");
     double SunLong = CAASun::ApparentEclipticLongitude(JD);
 
-    for (int i=0; i<9; i++)  {
+    for (int i=1; i<6; i++)  {
         CAAElliptical::EllipticalObject planet = static_cast<CAAElliptical::EllipticalObject> (i);
         PlanetDetails = CAAElliptical::Calculate(date.Julian(), planet);
         double AST = CAASidereal::ApparentGreenwichSiderealTime(date.Julian());
