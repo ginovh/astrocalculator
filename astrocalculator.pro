@@ -7,11 +7,12 @@ DEPENDPATH += .
 CONFIG += debug
 
 INCLUDEPATH += . aaplus/
-QMAKE_RPATHDIR += aaplus/lib
-LIBS += -Laaplus/lib -laaplus
+QMAKE_RPATHDIR += aaplus/build/lib
+LIBS += -Laaplus/build/lib -laaplus
 
 # Input
 HEADERS += astrocalculator.h astroDateTime.h
 FORMS += astrocalculator.ui
 SOURCES += main.cpp astrocalculator.cpp astroDateTime.cpp
 QT += widgets
+QMAKE_CXXFLAGS += -std=c++17

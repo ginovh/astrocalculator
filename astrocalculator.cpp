@@ -25,26 +25,26 @@ void AstroCalculator::setDateNow()
 
 void AstroCalculator::updateWeekday()
 {
-	switch ( date.DayOfWeek() ) {
-	case CAADate::SUNDAY :
+    switch ( date.DayOfWeek() ) {
+    case CAADate::DAY_OF_WEEK::SUNDAY :
 		WeekdayLabel->setText("Sunday");
 		break;
-	case CAADate::MONDAY :
+    case CAADate::DAY_OF_WEEK::MONDAY :
 		WeekdayLabel->setText("Monday");
 		break;
-	case CAADate::TUESDAY :
+    case CAADate::DAY_OF_WEEK::TUESDAY :
 		WeekdayLabel->setText("Tuesday");
 		break;
-	case CAADate::WEDNESDAY :
+    case CAADate::DAY_OF_WEEK::WEDNESDAY :
 		WeekdayLabel->setText("Wednesday");
 		break;
-	case CAADate::THURSDAY :
+    case CAADate::DAY_OF_WEEK::THURSDAY :
 		WeekdayLabel->setText("Thursday");
 		break;
-	case CAADate::FRIDAY :
+    case CAADate::DAY_OF_WEEK::FRIDAY :
 		WeekdayLabel->setText("Friday");
 		break;
-	case CAADate::SATURDAY :
+    case CAADate::DAY_OF_WEEK::SATURDAY :
 		WeekdayLabel->setText("Saturday");
 		break;
 	default:
@@ -67,13 +67,13 @@ void AstroCalculator::riseSetSun(QDate date)  {
     CAADate date_0hUT(date.year(), date.month(), date.day(), 0,0,0,true);
     double JD = date_0hUT.Julian();
 
-    CAAEllipticalPlanetaryDetails ObjectDetails = CAAElliptical::Calculate(JD - 1, CAAElliptical::SUN);
+    CAAEllipticalPlanetaryDetails ObjectDetails = CAAElliptical::Calculate(JD - 1, CAAElliptical::EllipticalObject::SUN, true);
     double Alpha1 = ObjectDetails.ApparentGeocentricRA;
     double Delta1 = ObjectDetails.ApparentGeocentricDeclination;
-    ObjectDetails = CAAElliptical::Calculate(JD, CAAElliptical::SUN);
+    ObjectDetails = CAAElliptical::Calculate(JD, CAAElliptical::EllipticalObject::SUN, true);
     double Alpha2 = ObjectDetails.ApparentGeocentricRA;
     double Delta2 = ObjectDetails.ApparentGeocentricDeclination;
-    ObjectDetails = CAAElliptical::Calculate(JD + 1, CAAElliptical::SUN);
+    ObjectDetails = CAAElliptical::Calculate(JD + 1, CAAElliptical::EllipticalObject::SUN, true);
     double Alpha3 = ObjectDetails.ApparentGeocentricRA;
     double Delta3 = ObjectDetails.ApparentGeocentricDeclination;
 
@@ -105,10 +105,10 @@ void AstroCalculator::updateHorizontalCoordSun()
 {
     // calculate horizontal coord.
     double JD = date.Julian() + CAADynamicalTime::DeltaT(date.Julian()) / 86400.0;
-    double SunLong = CAASun::ApparentEclipticLongitude(JD);
-    double SunLat = CAASun::ApparentEclipticLatitude(JD);
+    double SunLong = CAASun::ApparentEclipticLongitude(JD, true);
+    double SunLat = CAASun::ApparentEclipticLatitude(JD, true);
     CAA2DCoordinate Equatorial = CAACoordinateTransformation::Ecliptic2Equatorial(SunLong, SunLat, CAANutation::TrueObliquityOfEcliptic(JD));
-    double SunRad = CAAEarth::RadiusVector(JD);
+    double SunRad = CAAEarth::RadiusVector(JD, true);
     CAA2DCoordinate SunTopo = CAAParallax::Equatorial2Topocentric(Equatorial.X, Equatorial.Y, SunRad, longitudeInput->value(), latitudeInput->value(), Height, JD);
     double AST = CAASidereal::ApparentGreenwichSiderealTime(date.Julian());
     double LongtitudeAsHourAngle = CAACoordinateTransformation::DegreesToHours(longitudeInput->value());
@@ -155,23 +155,23 @@ void AstroCalculator::riseSetPlanet(QDate date)  {
         planet = static_cast<CAAElliptical::EllipticalObject> (i);
 
         switch ( planet ) {
-        case CAAElliptical::MERCURY:
+        case CAAElliptical::EllipticalObject::MERCURY:
             temp_str = PlanetLabel->text() + "Mercury\t";
             PlanetLabel->setText(temp_str);
             break;
-        case CAAElliptical::VENUS:
+        case CAAElliptical::EllipticalObject::VENUS:
             temp_str = PlanetLabel->text() + "Venus\t";
             PlanetLabel->setText(temp_str);
             break;
-        case CAAElliptical::MARS:
+        case CAAElliptical::EllipticalObject::MARS:
             temp_str = PlanetLabel->text() + "Mars\t";
             PlanetLabel->setText(temp_str);
             break;
-        case CAAElliptical::JUPITER:
+        case CAAElliptical::EllipticalObject::JUPITER:
             temp_str = PlanetLabel->text() + "Jupiter\t";
             PlanetLabel->setText(temp_str);
             break;
-        case CAAElliptical::SATURN:
+        case CAAElliptical::EllipticalObject::SATURN:
             temp_str = PlanetLabel->text() + "Saturn\t";
             PlanetLabel->setText(temp_str);
             break;
@@ -179,13 +179,13 @@ void AstroCalculator::riseSetPlanet(QDate date)  {
             break;
         }
 
-        CAAEllipticalPlanetaryDetails ObjectDetails = CAAElliptical::Calculate(JD - 1, planet);
+        CAAEllipticalPlanetaryDetails ObjectDetails = CAAElliptical::Calculate(JD - 1, planet, true);
         double Alpha1 = ObjectDetails.ApparentGeocentricRA;
         double Delta1 = ObjectDetails.ApparentGeocentricDeclination;
-        ObjectDetails = CAAElliptical::Calculate(JD, planet);
+        ObjectDetails = CAAElliptical::Calculate(JD, planet, true);
         double Alpha2 = ObjectDetails.ApparentGeocentricRA;
         double Delta2 = ObjectDetails.ApparentGeocentricDeclination;
-        ObjectDetails = CAAElliptical::Calculate(JD + 1, planet);
+        ObjectDetails = CAAElliptical::Calculate(JD + 1, planet, true);
         double Alpha3 = ObjectDetails.ApparentGeocentricRA;
         double Delta3 = ObjectDetails.ApparentGeocentricDeclination;
 
@@ -229,11 +229,11 @@ void AstroCalculator::updateHorizontalCoordPlanet()
     PlanetRightAscension->setText("");
     PlanetDeclination->setText("");
     PlanetElongation->setText("");
-    double SunLong = CAASun::ApparentEclipticLongitude(JD);
+    double SunLong = CAASun::ApparentEclipticLongitude(JD, true);
 
     for (int i=1; i<6; i++)  {
         CAAElliptical::EllipticalObject planet = static_cast<CAAElliptical::EllipticalObject> (i);
-        PlanetDetails = CAAElliptical::Calculate(date.Julian(), planet);
+        PlanetDetails = CAAElliptical::Calculate(date.Julian(), planet, true);
         double AST = CAASidereal::ApparentGreenwichSiderealTime(date.Julian());
         double LongtitudeAsHourAngle = CAACoordinateTransformation::DegreesToHours(longitudeInput->value());
 
@@ -358,7 +358,7 @@ void AstroCalculator::updateMoon()  {
     temp_str = QString::number(Equatorial.Y) ;
     MoonDeclination->setText(temp_str);
 
-    double SunLong = CAASun::ApparentEclipticLongitude(JD);
+    double SunLong = CAASun::ApparentEclipticLongitude(JD, true);
     double MoonElong = acos(
             cos(CAACoordinateTransformation::DegreesToRadians(MoonLat))
             * cos(CAACoordinateTransformation::DegreesToRadians(MoonLong - SunLong)
