@@ -15,7 +15,7 @@ You may find comments in the code refering to this book.
 ```
 ./getaaplus.bash
 make distclean # to clean repo artifacts before pushing to github
-qmake jupitermoon.pro
+qmake astrocalculator.pro
 make -j4
 make clean  # remove intermediate files but leaves app
 ```
